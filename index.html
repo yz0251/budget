@@ -98,9 +98,12 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 
 /* ── MAIN GRID ── */
 .main-grid{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;}
+.left-col{position:sticky;top:76px;max-height:calc(100vh - 90px);overflow-y:auto;display:flex;flex-direction:column;gap:20px;}
+.left-col::-webkit-scrollbar{width:3px;}
+.left-col::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
 /* ── MINI CALENDAR ── */
-.mini-cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:80px;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+.mini-cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
 .mini-cal-head{padding:16px 20px;border-bottom:1px solid var(--border);}
 .mini-cal-title{font-size:0.85rem;font-weight:700;}
 .cal-grid{padding:12px 16px 16px;}
@@ -340,25 +343,6 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
   <div class="main-content">
     <div id="statusMsg"></div>
 
-    <div class="compare-row" id="compareRow">
-      <div class="cmp-card">
-        <div class="cmp-icon">📅</div>
-        <div class="cmp-info">
-          <div class="cmp-label">이번주 vs 지난주 지출</div>
-          <div class="cmp-val" id="cmpWeekVal">—</div>
-          <div class="cmp-sub" id="cmpWeekSub"></div>
-        </div>
-      </div>
-      <div class="cmp-card">
-        <div class="cmp-icon">📆</div>
-        <div class="cmp-info">
-          <div class="cmp-label">이번달 vs 지난달 지출</div>
-          <div class="cmp-val" id="cmpMonthVal">—</div>
-          <div class="cmp-sub" id="cmpMonthSub"></div>
-        </div>
-      </div>
-    </div>
-
     <div class="summary-row">
       <div class="sc ic"><div class="sc-lbl">수입</div><div class="sc-amt ic" id="sumI">₩0</div><div class="sc-sub" id="sumIC">0건</div></div>
       <div class="sc ex"><div class="sc-lbl">지출</div><div class="sc-amt ex" id="sumE">₩0</div><div class="sc-sub" id="sumEC">0건</div></div>
@@ -368,7 +352,7 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
     <div class="main-grid">
 
       <!-- 미니 달력 -->
-      <div>
+      <div class="left-col">
         <div class="mini-cal">
           <div class="mini-cal-head"><span class="mini-cal-title">📅 월간 달력</span></div>
           <div class="cal-grid">
@@ -384,23 +368,20 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
         </div>
 
         <!-- 카테고리 차트 -->
-        <div class="panel" style="margin-top:20px;">
+        <div class="panel">
           <div class="panel-head"><span class="panel-title">카테고리별 지출</span></div>
           <div class="panel-body" id="catChart"></div>
         </div>
 
         <!-- 고정지출 -->
-        <div class="panel" style="margin-top:20px;">
+        <div class="panel">
           <div class="panel-head">
             <span class="panel-title">📌 고정지출</span>
             <span style="font-size:0.72rem;color:var(--muted)">매달 자동 집계</span>
           </div>
           <div class="fixed-list" id="fixedList"></div>
-          <div class="fixed-add-row">
-            <input class="fixed-inp" id="fixedName" placeholder="항목명 (예: 넷플릭스)">
-            <input class="fixed-inp" id="fixedAmt" placeholder="금액" style="max-width:90px">
-            <input class="fixed-inp" id="fixedDay" placeholder="날짜" style="max-width:60px" type="number" min="1" max="31">
-            <button class="fixed-add-btn" id="fixedAddBtn">추가</button>
+          <div style="padding:12px 20px;border-top:1px solid var(--border);">
+            <button class="fixed-add-btn" id="fixedAddBtn" style="width:100%;">+ 고정지출 추가</button>
           </div>
         </div>
       </div>
@@ -427,6 +408,45 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
         </div>
       </div>
 
+      <!-- 지출 비교 -->
+      <div class="compare-row" id="compareRow">
+        <div class="cmp-card">
+          <div class="cmp-icon">📅</div>
+          <div class="cmp-info">
+            <div class="cmp-label">이번주 vs 지난주 지출</div>
+            <div class="cmp-val" id="cmpWeekVal">—</div>
+            <div class="cmp-sub" id="cmpWeekSub"></div>
+          </div>
+        </div>
+        <div class="cmp-card">
+          <div class="cmp-icon">📆</div>
+          <div class="cmp-info">
+            <div class="cmp-label">이번달 vs 지난달 지출</div>
+            <div class="cmp-val" id="cmpMonthVal">—</div>
+            <div class="cmp-sub" id="cmpMonthSub"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FIXED EXPENSE MODAL ═══ -->
+<div class="modal-overlay" id="fixedModal" style="display:none">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-title">📌 고정지출 추가</div>
+    <div class="modal-sub">매달 반복되는 지출을 등록하세요</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+      <input class="modal-textarea" style="min-height:auto;resize:none;padding:10px 14px;" id="fixedName" placeholder="항목명 (예: 넷플릭스, 헬스장)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <input class="modal-textarea" style="min-height:auto;resize:none;padding:10px 14px;" id="fixedAmt" placeholder="금액 (예: 17000)">
+        <input class="modal-textarea" style="min-height:auto;resize:none;padding:10px 14px;" id="fixedDay" placeholder="매달 몇 일? (1~31)" type="number" min="1" max="31">
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" id="fixedCancelBtn">취소</button>
+      <button class="modal-btn save" id="fixedSaveBtn">추가</button>
     </div>
   </div>
 </div>
@@ -524,8 +544,21 @@ function init() {
     renderTx();
   });
 
-  // 고정지출 추가
-  document.getElementById('fixedAddBtn').addEventListener('click', addFixedExpense);
+  // 고정지출 모달
+  document.getElementById('fixedAddBtn').addEventListener('click', () => {
+    document.getElementById('fixedName').value = '';
+    document.getElementById('fixedAmt').value = '';
+    document.getElementById('fixedDay').value = '';
+    document.getElementById('fixedModal').style.display = 'flex';
+    setTimeout(() => document.getElementById('fixedName').focus(), 100);
+  });
+  document.getElementById('fixedCancelBtn').addEventListener('click', () => {
+    document.getElementById('fixedModal').style.display = 'none';
+  });
+  document.getElementById('fixedSaveBtn').addEventListener('click', addFixedExpense);
+  document.getElementById('fixedModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) document.getElementById('fixedModal').style.display = 'none';
+  });
 
   // 로컬 데이터 불러오기
   try { localCats = JSON.parse(localStorage.getItem('budget_cats') || '{}'); } catch(e) {}
@@ -878,8 +911,7 @@ function renderTx() {
           '<div class="tx-title">' + escHtml(clean) + '</div>' +
           '<div class="tx-cat" style="display:flex;align-items:center;gap:6px">' +
             '<span>' + label + calTag + '</span>' +
-            '<button class="tx-memo-btn cat-change-btn" data-key="' + e.key + '" style="font-size:0.65rem;padding:1px 5px;">✏️ 카테고리</button>' +
-            (isCustomCat ? '<span style="font-size:0.65rem;color:var(--accent);background:rgba(108,99,255,0.08);padding:1px 5px;border-radius:4px;">수정됨</span>' : '') +
+            (label === '기타' || isCustomCat ? '<button class="tx-memo-btn cat-change-btn" data-key="' + e.key + '" style="font-size:0.65rem;padding:1px 5px;">' + (isCustomCat ? '✏️ ' + label : '📦 카테고리 지정') + '</button>' : '') +
           '</div>' +
           memoHtml +
         '</div>' +
@@ -1127,6 +1159,7 @@ function addFixedExpense() {
   document.getElementById('fixedName').value = '';
   document.getElementById('fixedAmt').value = '';
   document.getElementById('fixedDay').value = '';
+  document.getElementById('fixedModal').style.display = 'none';
   renderFixedList();
 }
 
