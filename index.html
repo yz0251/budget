@@ -161,16 +161,20 @@
     function goVocab() { document.getElementById('mainScreen').style.display='none'; document.getElementById('vocabScreen').style.display='flex'; renderFullVocab(); }
 
     function processJapaneseText(text, vocabList) {
-        // 1. {대상글자}[요미가나] 형식 처리 -> <ruby> 태그로 변환
+        if (!text) return "";
+    
+        // 1. {대상글자}[요미가나] 형식을 <ruby> 태그로 변환
+        // 이 로직이 적용되면 {五輪}[ごりん] 이 五輪(위에 ごりん 표시)으로 바뀝니다.
         let processed = text.replace(/\{([^{}]+)\}\[([^\[\]]+)\]/g, '<ruby>$1<rt>$2</rt></ruby>');
         
-        // 2. 단어장 매칭 (호버 뜻 표시 - 선택 사항)
+        // 2. 단어장 매칭 (호버 시 뜻 표시)
         if (vocabList && vocabList.length > 0) {
             vocabList.forEach(v => {
+                // 단어 뜻에 *별표*로 감싼 핵심 뜻이 있는지 확인
                 const match = v.mean.match(/\*([^*]+)\*/);
                 if (match) {
                     const primaryMean = match[1];
-                    // 이미 루비 태그가 적용된 곳은 피해서 단어 강조 적용
+                    // 이미 변환된 루비 태그(<rt>) 안의 글자는 건드리지 않도록 정규식 설정
                     const regex = new RegExp(`(${v.word})(?![^<]*>|[^<>]*<\/rt>)`, 'g');
                     processed = processed.replace(regex, `<span class="highlight-word" title="${primaryMean}">$1</span>`);
                 }
