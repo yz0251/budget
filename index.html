@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>캘린더 가계부</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📒</text></svg>">
+<link id="favicon" rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📒</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -74,7 +74,7 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 .btn-sm.refresh{border-color:var(--blue);color:var(--blue);}
 .btn-sm.refresh:hover{background:rgba(96,165,250,0.1);}
 
-.main-content{max-width:1200px;margin:0 auto;padding:28px 32px;}
+.main-content{max-width:1200px;margin:0 auto;padding:16px 28px;}
 
 #statusMsg{padding:12px 16px;border-radius:8px;font-size:0.82rem;margin-bottom:20px;display:none;align-items:center;gap:8px;}
 #statusMsg.show{display:flex;}
@@ -83,19 +83,19 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 #statusMsg.error{background:rgba(248,113,113,0.1);color:var(--expense);border:1px solid rgba(248,113,113,0.2);}
 
 /* ── SUMMARY ── */
-.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
-.sc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;position:relative;overflow:hidden;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
-.sc:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08);}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 18px;position:relative;overflow:hidden;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.04);display:flex;align-items:center;gap:12px;}
+.sc:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.08);}
+.sc::before{content:'';position:absolute;top:0;bottom:0;left:0;width:3px;}
 .sc.ic::before{background:var(--income);}
 .sc.ex::before{background:var(--expense);}
 .sc.bl::before{background:var(--accent);}
-.sc-lbl{font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
-.sc-amt{font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:700;letter-spacing:-1px;}
+.sc-lbl{font-size:0.68rem;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+.sc-amt{font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-0.5px;}
 .sc-amt.ic{color:var(--income);}
 .sc-amt.ex{color:var(--expense);}
 .sc-amt.bl{color:var(--accent);}
-.sc-sub{font-size:0.75rem;color:var(--muted);margin-top:6px;}
+.sc-sub{font-size:0.68rem;color:var(--muted);margin-top:1px;}
 
 /* ── MAIN GRID ── */
 .main-grid{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;}
@@ -257,8 +257,10 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 .fixed-name{flex:1;font-size:0.85rem;font-weight:500;}
 .fixed-amt{font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:700;color:var(--expense);white-space:nowrap;}
 .fixed-day{font-size:0.72rem;color:var(--muted);white-space:nowrap;}
-.fixed-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:4px;transition:all 0.15s;}
+.fixed-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.85rem;padding:2px 6px;border-radius:4px;transition:all 0.15s;}
 .fixed-del:hover{color:var(--expense);background:rgba(244,63,94,0.08);}
+.fixed-edit{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.85rem;padding:2px 6px;border-radius:4px;transition:all 0.15s;}
+.fixed-edit:hover{color:var(--accent);background:rgba(108,99,255,0.08);}
 .fixed-add-row{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;}
 .fixed-inp{flex:1;min-width:80px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:0.82rem;color:var(--text);font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.15s;}
 .fixed-inp:focus{border-color:var(--accent);}
@@ -343,9 +345,9 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
     <div id="statusMsg"></div>
 
     <div class="summary-row">
-      <div class="sc ic"><div class="sc-lbl">수입</div><div class="sc-amt ic" id="sumI">₩0</div><div class="sc-sub" id="sumIC">0건</div></div>
-      <div class="sc ex"><div class="sc-lbl">지출</div><div class="sc-amt ex" id="sumE">₩0</div><div class="sc-sub" id="sumEC">0건</div></div>
-      <div class="sc bl"><div class="sc-lbl">잔액</div><div class="sc-amt bl" id="sumB">₩0</div><div class="sc-sub" id="sumBN">—</div></div>
+      <div class="sc ic"><div style="font-size:1.4rem">💚</div><div><div class="sc-lbl">수입</div><div class="sc-amt ic" id="sumI">₩0</div><div class="sc-sub" id="sumIC">0건</div></div></div>
+      <div class="sc ex"><div style="font-size:1.4rem">❤️</div><div><div class="sc-lbl">지출</div><div class="sc-amt ex" id="sumE">₩0</div><div class="sc-sub" id="sumEC">0건</div></div></div>
+      <div class="sc bl"><div style="font-size:1.4rem">💜</div><div><div class="sc-lbl">잔액</div><div class="sc-amt bl" id="sumB">₩0</div><div class="sc-sub" id="sumBN">—</div></div></div>
     </div>
 
     <div class="main-grid">
@@ -420,34 +422,39 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
         </div>
       </div>
 
-      <!-- 고정지출 목록 -->
-      <div class="panel">
-        <div class="panel-head">
-          <span class="panel-title">📌 고정지출</span>
-          <span style="font-size:0.72rem;color:var(--muted)">매달 반복 지출</span>
-        </div>
-        <div class="fixed-list" id="fixedList"></div>
-      </div>
-
     </div>
   </div>
 </div>
 
 <!-- ═══ FIXED EXPENSE MODAL ═══ -->
 <div class="modal-overlay" id="fixedModal" style="display:none">
-  <div class="modal" style="max-width:360px">
-    <div class="modal-title">📌 고정지출 추가</div>
-    <div class="modal-sub">매달 반복되는 지출을 등록하세요</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
-      <input class="modal-textarea" style="min-height:auto;resize:none;padding:10px 14px;" id="fixedName" placeholder="항목명 (예: 넷플릭스, 헬스장)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <input class="modal-textarea" style="min-height:auto;resize:none;padding:10px 14px;" id="fixedAmt" placeholder="금액 (예: 17000)">
-        <input class="modal-textarea" style="min-height:auto;resize:none;padding:10px 14px;" id="fixedDay" placeholder="매달 몇 일? (1~31)" type="number" min="1" max="31">
+  <div class="modal" style="max-width:460px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div class="modal-title" style="margin-bottom:0">📌 고정지출 관리</div>
+      <button class="modal-btn save" id="fixedOpenFormBtn" style="padding:6px 14px;font-size:0.78rem;">+ 새로 추가</button>
+    </div>
+
+    <!-- 추가/수정 폼 (기본 숨김) -->
+    <div id="fixedForm" style="display:none;background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--accent);margin-bottom:10px;" id="fixedFormTitle">새 고정지출</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <input class="modal-textarea" style="min-height:auto;resize:none;padding:9px 12px;" id="fixedName" placeholder="항목명 (예: 넷플릭스, 헬스장)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <input class="modal-textarea" style="min-height:auto;resize:none;padding:9px 12px;" id="fixedAmt" placeholder="금액 (예: 17000)">
+          <input class="modal-textarea" style="min-height:auto;resize:none;padding:9px 12px;" id="fixedDay" placeholder="매달 몇 일?" type="number" min="1" max="31">
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px;">
+          <button class="modal-btn cancel" id="fixedFormCancelBtn" style="padding:6px 14px;font-size:0.78rem;">취소</button>
+          <button class="modal-btn save" id="fixedSaveBtn" style="padding:6px 14px;font-size:0.78rem;">저장</button>
+        </div>
       </div>
     </div>
-    <div class="modal-btns">
-      <button class="modal-btn cancel" id="fixedCancelBtn">취소</button>
-      <button class="modal-btn save" id="fixedSaveBtn">추가</button>
+
+    <!-- 목록 -->
+    <div class="fixed-list" id="fixedList" style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;"></div>
+
+    <div class="modal-btns" style="margin-top:16px;">
+      <button class="modal-btn cancel" id="fixedCancelBtn">닫기</button>
     </div>
   </div>
 </div>
@@ -496,6 +503,7 @@ let catTarget = null;
 let localMemos = {};        // { key: memo }
 let localCats = {};         // { key: category }  사용자 지정 카테고리
 let fixedExpenses = [];     // [{ name, amount, day }]
+let fixedEditIdx = -1;      // 수정 중인 고정지출 인덱스
 
 // ── 초기화 ─────────────────────────────
 function init() {
@@ -547,16 +555,31 @@ function init() {
 
   // 고정지출 모달
   document.getElementById('fixedAddBtn').addEventListener('click', () => {
+    fixedEditIdx = -1;
     document.getElementById('fixedName').value = '';
     document.getElementById('fixedAmt').value = '';
     document.getElementById('fixedDay').value = '';
+    document.getElementById('fixedForm').style.display = 'none';
     document.getElementById('fixedModal').style.display = 'flex';
-    setTimeout(() => document.getElementById('fixedName').focus(), 100);
+    renderFixedList();
+  });
+  document.getElementById('fixedOpenFormBtn').addEventListener('click', () => {
+    fixedEditIdx = -1;
+    document.getElementById('fixedFormTitle').textContent = '새 고정지출';
+    document.getElementById('fixedName').value = '';
+    document.getElementById('fixedAmt').value = '';
+    document.getElementById('fixedDay').value = '';
+    document.getElementById('fixedForm').style.display = 'block';
+    setTimeout(() => document.getElementById('fixedName').focus(), 50);
+  });
+  document.getElementById('fixedFormCancelBtn').addEventListener('click', () => {
+    document.getElementById('fixedForm').style.display = 'none';
+    fixedEditIdx = -1;
   });
   document.getElementById('fixedCancelBtn').addEventListener('click', () => {
     document.getElementById('fixedModal').style.display = 'none';
   });
-  document.getElementById('fixedSaveBtn').addEventListener('click', addFixedExpense);
+  document.getElementById('fixedSaveBtn').addEventListener('click', saveFixedExpense);
   document.getElementById('fixedModal').addEventListener('click', e => {
     if (e.target === e.currentTarget) document.getElementById('fixedModal').style.display = 'none';
   });
@@ -602,7 +625,10 @@ function handleOAuthCallback() {
   history.replaceState(null, '', location.pathname);
   accessToken = token;
   Promise.all([fetchUserInfo(), fetchCalendar(false)])
-    .then(() => goMain())
+    .then(() => {
+      goMain();
+      showStatus('success', '✅ 캘린더 불러오기 완료 (' + new Date().toLocaleTimeString('ko-KR') + ')');
+    })
     .catch(e => {
       document.getElementById('loginScreen').style.display = 'flex';
       document.getElementById('mainScreen').style.display = 'none';
@@ -1056,16 +1082,29 @@ function renderChart() {
   const sorted = Object.entries(cm).sort((a,b) => b[1]-a[1]).slice(0,8);
   const max = sorted[0]?.[1] || 1;
   const el = document.getElementById('catChart');
+
+  // 전체 카테고리 아이콘 행
+  const allCatIcons = ALL_CATS.map(cat => {
+    const used = cm[cat] !== undefined;
+    return '<span title="' + cat + '" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-size:0.9rem;background:' +
+      (used ? 'rgba(108,99,255,0.10)' : 'var(--surface2)') +
+      ';opacity:' + (used ? '1' : '0.45') + ';cursor:default">' + cat.split(' ')[0] + '</span>';
+  }).join('');
+
   if (!sorted.length) {
-    el.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;text-align:center;padding:12px 0">지출 내역 없음</div>';
+    el.innerHTML =
+      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">' + allCatIcons + '</div>' +
+      '<div style="color:var(--muted);font-size:0.82rem;text-align:center;padding:8px 0">이번달 지출 내역 없음</div>';
     return;
   }
-  el.innerHTML = sorted.map(([cat,val],i) =>
-    '<div class="cat-row">' +
-      '<div class="cat-top"><span class="cat-name">' + cat + '</span><span class="cat-val">' + fmt(val) + '</span></div>' +
-      '<div class="cat-track"><div class="cat-fill" style="width:' + (val/max*100).toFixed(1) + '%;opacity:' + (1-i*0.08) + '"></div></div>' +
-    '</div>'
-  ).join('');
+  el.innerHTML =
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">' + allCatIcons + '</div>' +
+    sorted.map(([cat,val],i) =>
+      '<div class="cat-row">' +
+        '<div class="cat-top"><span class="cat-name">' + cat + '</span><span class="cat-val">' + fmt(val) + '</span></div>' +
+        '<div class="cat-track"><div class="cat-fill" style="width:' + (val/max*100).toFixed(1) + '%;opacity:' + (1-i*0.08) + '"></div></div>' +
+      '</div>'
+    ).join('');
 }
 
 // ── 전월/전주 비교 ─────────────────────
@@ -1129,40 +1168,63 @@ function renderCompare() {
 // ── 고정지출 ────────────────────────────
 function renderFixedList() {
   const el = document.getElementById('fixedList');
+  if (!el) return;
   if (!fixedExpenses.length) {
-    el.innerHTML = '<div class="fixed-empty">등록된 고정지출이 없어요.<br>매달 반복되는 지출을 추가해 보세요!</div>';
+    el.innerHTML = '<div class="fixed-empty" style="padding:20px;text-align:center;color:var(--muted);font-size:0.82rem;">등록된 고정지출이 없어요<br><span style="font-size:0.75rem">+ 새로 추가 버튼을 눌러보세요</span></div>';
     return;
   }
+  const total = fixedExpenses.reduce((s,f) => s + f.amount, 0);
   el.innerHTML = fixedExpenses.map((f, i) =>
     '<div class="fixed-item">' +
       '<div class="fixed-name">' + escHtml(f.name) + '</div>' +
       '<div class="fixed-day">매달 ' + f.day + '일</div>' +
       '<div class="fixed-amt">-' + fmt(f.amount) + '</div>' +
-      '<button class="fixed-del" data-idx="' + i + '">🗑</button>' +
+      '<button class="fixed-edit" data-idx="' + i + '" title="수정">✏️</button>' +
+      '<button class="fixed-del" data-idx="' + i + '" title="삭제">🗑</button>' +
     '</div>'
-  ).join('');
+  ).join('') +
+  '<div style="padding:10px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:0.78rem;font-weight:700;">' +
+    '<span style="color:var(--muted)">월 합계</span>' +
+    '<span style="color:var(--expense)">-' + fmt(total) + '</span>' +
+  '</div>';
 
   el.querySelectorAll('.fixed-del').forEach(btn => {
     btn.addEventListener('click', () => {
+      if (!confirm(fixedExpenses[Number(btn.dataset.idx)].name + '을(를) 삭제할까요?')) return;
       fixedExpenses.splice(Number(btn.dataset.idx), 1);
       try { localStorage.setItem('budget_fixed', JSON.stringify(fixedExpenses)); } catch(e) {}
       renderFixedList();
     });
   });
+  el.querySelectorAll('.fixed-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = Number(btn.dataset.idx);
+      const f = fixedExpenses[idx];
+      fixedEditIdx = idx;
+      document.getElementById('fixedFormTitle').textContent = '수정: ' + f.name;
+      document.getElementById('fixedName').value = f.name;
+      document.getElementById('fixedAmt').value = f.amount;
+      document.getElementById('fixedDay').value = f.day;
+      document.getElementById('fixedForm').style.display = 'block';
+      setTimeout(() => document.getElementById('fixedName').focus(), 50);
+    });
+  });
 }
 
-function addFixedExpense() {
+function saveFixedExpense() {
   const name = document.getElementById('fixedName').value.trim();
   const amt  = parseInt(document.getElementById('fixedAmt').value.replace(/[^0-9]/g,''));
   const day  = parseInt(document.getElementById('fixedDay').value);
   if (!name || isNaN(amt) || amt <= 0) { alert('항목명과 금액을 입력해 주세요.'); return; }
   if (isNaN(day) || day < 1 || day > 31) { alert('날짜를 1~31 사이로 입력해 주세요.'); return; }
-  fixedExpenses.push({ name, amount: amt, day });
+  if (fixedEditIdx >= 0) {
+    fixedExpenses[fixedEditIdx] = { name, amount: amt, day };
+  } else {
+    fixedExpenses.push({ name, amount: amt, day });
+  }
   try { localStorage.setItem('budget_fixed', JSON.stringify(fixedExpenses)); } catch(e) {}
-  document.getElementById('fixedName').value = '';
-  document.getElementById('fixedAmt').value = '';
-  document.getElementById('fixedDay').value = '';
-  document.getElementById('fixedModal').style.display = 'none';
+  document.getElementById('fixedForm').style.display = 'none';
+  fixedEditIdx = -1;
   renderFixedList();
 }
 
