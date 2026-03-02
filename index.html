@@ -554,23 +554,24 @@ function init() {
   try { fixedExpenses= JSON.parse(localStorage.getItem('budget_fixed') || '[]'); } catch(e) {}
   try { customCats   = JSON.parse(localStorage.getItem('budget_custom_cats') || '[]'); } catch(e) {}
 
-  // 브라우저 세션에 저장된 토큰이 있는지 확인합니다.
-  const savedToken = sessionStorage.getItem('gc_access_token');
+  const savedToken = localStorage.getItem('gc_access_token');
+  
   if (savedToken) {
     accessToken = savedToken;
-    // 로그인 화면을 즉시 숨기고 메인 화면을 보여줍니다.
+    // 로그인 화면 건너뛰고 바로 메인 표시
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainScreen').style.display = 'flex';
     
-    // 저장된 토큰으로 데이터를 다시 불러옵니다.
+    // 데이터 불러오기 시도
     Promise.all([fetchUserInfo(), fetchCalendar(false)])
-      .then(() => {
-        goMain();
-      })
       .catch(e => {
-        console.error("세션 복구 실패:", e);
-        logout(); // 토큰이 만료되었을 경우 안전하게 로그아웃
+        // 만약 저장된 토큰이 만료되어 에러가 나면 자동으로 로그인 시도
+        console.error("토큰 만료 혹은 오류:", e);
+        startLogin(); 
       });
+  } else {
+    // 저장된 토큰이 없으면 로그인 화면 노출
+    document.getElementById('loginScreen').style.display = 'flex';
   }
 
   // Login
@@ -680,23 +681,16 @@ function handleOAuthCallback() {
   const params = new URLSearchParams(location.hash.slice(1));
   const token = params.get('access_token');
   if (!token) return;
+
   accessToken = token;
-  sessionStorage.setItem('gc_access_token', token);
+  localStorage.setItem('gc_access_token', token);
+
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('mainScreen').style.display = 'flex';
-  showStatus('loading', '캘린더 불러오는 중...');
-  history.replaceState(null, '', location.pathname);
-  accessToken = token;
-  Promise.all([fetchUserInfo(), fetchCalendar(false)])
-    .then(() => {
-      goMain();
-      showStatus('success', '✅ 캘린더 불러오기 완료 (' + new Date().toLocaleTimeString('ko-KR') + ')');
-    })
-    .catch(e => {
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('mainScreen').style.display = 'none';
-      showLoginError('로그인 실패: ' + e.message);
-    });
+  
+  history.replaceState(null, '', location.pathname); // URL에서 토큰 지우기
+  
+  Promise.all([fetchUserInfo(), fetchCalendar(false)]).then(() => goMain());
 }
 
 async function fetchUserInfo() {
@@ -709,43 +703,90 @@ async function fetchUserInfo() {
   else av.textContent = (data.name||'U')[0].toUpperCase();
 }
 
-async function fetchCalendar(showMsg=true) {
+async function fetchCalendar(showMsg = true) {
   if (isDemo) { renderAll(); return; }
   if (!accessToken) return;
   if (showMsg) showStatus('loading', '전체 캘린더 불러오는 중...');
-  const y=curYear, m=curMonth;
-  const timeMin=new Date(y,m-1,1).toISOString();
-  const timeMax=new Date(y,m,0,23,59,59).toISOString();
-  const listRes=await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList',{headers:{Authorization:'Bearer '+accessToken}});
-  if (listRes.status===401) { showStatus('error','세션이 만료되었습니다. 다시 로그인해 주세요.'); setTimeout(logout,2000); throw new Error('unauthorized'); }
-  if (!listRes.ok) throw new Error('CalendarList API 오류 '+listRes.status);
-  const calendars=(await listRes.json()).items||[];
-  allEvents=[];
-  await Promise.all(calendars.map(async cal => {
-    try {
-      const url='https://www.googleapis.com/calendar/v3/calendars/'+encodeURIComponent(cal.id)
-        +'/events?timeMin='+timeMin+'&timeMax='+timeMax+'&singleEvents=true&orderBy=startTime&maxResults=2500';
-      const res=await fetch(url,{headers:{Authorization:'Bearer '+accessToken}});
-      if (!res.ok) return;
-      const data=await res.json();
-      for (const item of (data.items||[])) {
-        const title=item.summary||'';
-        if (!title.includes('₩')) continue;
-        const amount=parseAmount(title);
-        if (amount===null) continue;
-        const date=item.start?.date||item.start?.dateTime?.split('T')[0];
-        const key=(item.id||(date+title)).replace(/[^a-zA-Z0-9]/g,'_');
-        allEvents.push({ date,title,amount,
-          type:amount>0?'income':'expense',
-          category:getCategory(title,key),
-          calendarName:cal.summary||cal.id,
-          gcMemo:item.description||'', key });
+
+  const y = curYear, m = curMonth;
+  const timeMin = new Date(y, m - 1, 1).toISOString();
+  const timeMax = new Date(y, m, 0, 23, 59, 59).toISOString();
+
+  try {
+    // 캘린더 리스트 가져오기
+    const listRes = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
+      headers: { Authorization: 'Bearer ' + accessToken }
+    });
+
+    // [수정] 토큰 만료(401) 시 자동으로 재로그인 시도
+    if (listRes.status === 401) {
+      localStorage.removeItem('gc_access_token'); // 낡은 토큰 삭제
+      showStatus('error', '세션이 만료되어 재연결 중입니다...');
+      
+      // 1초 뒤 자동 로그인 함수 호출
+      setTimeout(() => {
+        startLogin(); 
+      }, 1000);
+      return; 
+    }
+
+    if (!listRes.ok) throw new Error('CalendarList API 오류 ' + listRes.status);
+    
+    const calendars = (await listRes.json()).items || [];
+    allEvents = [];
+
+    // 각 캘린더에서 이벤트 가져오기
+    await Promise.all(calendars.map(async cal => {
+      try {
+        const url = 'https://www.googleapis.com/calendar/v3/calendars/'
+          + encodeURIComponent(cal.id)
+          + '/events?timeMin=' + timeMin + '&timeMax=' + timeMax
+          + '&singleEvents=true&orderBy=startTime&maxResults=2500';
+          
+        const res = await fetch(url, { headers: { Authorization: 'Bearer ' + accessToken } });
+        
+        // 여기서도 만약 401이 나면 위와 동일하게 처리할 수 있지만, 
+        // 보통 위에서 먼저 걸러지므로 기본 처리만 합니다.
+        if (!res.ok) return;
+
+        const data = await res.json();
+        for (const item of (data.items || [])) {
+          const title = item.summary || '';
+          if (!title.includes('₩')) continue;
+          
+          const amount = parseAmount(title);
+          if (amount === null) continue;
+          
+          const date = item.start?.date || item.start?.dateTime?.split('T')[0];
+          const key = (item.id || (date + title)).replace(/[^a-zA-Z0-9]/g, '_');
+          
+          allEvents.push({
+            date, title, amount,
+            type: amount > 0 ? 'income' : 'expense',
+            category: getCategory(title, key),
+            calendarName: cal.summary || cal.id,
+            gcMemo: item.description || '',
+            key
+          });
+        }
+      } catch (e) {
+        console.error("이벤트 로드 실패:", e);
       }
-    } catch(e){}
-  }));
-  allEvents.sort((a,b)=>a.date.localeCompare(b.date));
-  if (showMsg) showStatus('success','✅ '+calendars.length+'개 캘린더에서 '+allEvents.length+'건 로드 완료 ('+new Date().toLocaleTimeString('ko-KR')+')');
-  renderAll();
+    }));
+
+    allEvents.sort((a, b) => a.date.localeCompare(b.date));
+    
+    if (showMsg) {
+      showStatus('success', '✅ ' + calendars.length + '개 캘린더 로드 완료 (' + new Date().toLocaleTimeString('ko-KR') + ')');
+    }
+    renderAll();
+
+  } catch (err) {
+    console.error("캘린더 호출 중 에러 발생:", err);
+    if (err.message !== 'unauthorized') {
+      showStatus('error', '데이터를 불러오지 못했습니다.');
+    }
+  }
 }
 
 function loadDemo() {
@@ -790,11 +831,10 @@ function goMain() {
 }
 
 function logout() {
-  sessionStorage.removeItem('gc_access_token');
+  localStorage.removeItem('gc_access_token');
   accessToken='';isDemo=false;allEvents=[];selectedDate=null;
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('mainScreen').style.display='none';
-  document.getElementById('loginError').style.display='none';
 }
 
 function changeMonth(d) {
