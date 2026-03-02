@@ -554,6 +554,25 @@ function init() {
   try { fixedExpenses= JSON.parse(localStorage.getItem('budget_fixed') || '[]'); } catch(e) {}
   try { customCats   = JSON.parse(localStorage.getItem('budget_custom_cats') || '[]'); } catch(e) {}
 
+  // 브라우저 세션에 저장된 토큰이 있는지 확인합니다.
+  const savedToken = sessionStorage.getItem('gc_access_token');
+  if (savedToken) {
+    accessToken = savedToken;
+    // 로그인 화면을 즉시 숨기고 메인 화면을 보여줍니다.
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainScreen').style.display = 'flex';
+    
+    // 저장된 토큰으로 데이터를 다시 불러옵니다.
+    Promise.all([fetchUserInfo(), fetchCalendar(false)])
+      .then(() => {
+        goMain();
+      })
+      .catch(e => {
+        console.error("세션 복구 실패:", e);
+        logout(); // 토큰이 만료되었을 경우 안전하게 로그아웃
+      });
+  }
+
   // Login
   document.getElementById('loginBtn').addEventListener('click', startLogin);
   document.getElementById('demoBtn').addEventListener('click', loadDemo);
@@ -661,6 +680,8 @@ function handleOAuthCallback() {
   const params = new URLSearchParams(location.hash.slice(1));
   const token = params.get('access_token');
   if (!token) return;
+  accessToken = token;
+  sessionStorage.setItem('gc_access_token', token);
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('mainScreen').style.display = 'flex';
   showStatus('loading', '캘린더 불러오는 중...');
@@ -769,6 +790,7 @@ function goMain() {
 }
 
 function logout() {
+  sessionStorage.removeItem('gc_access_token');
   accessToken='';isDemo=false;allEvents=[];selectedDate=null;
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('mainScreen').style.display='none';
