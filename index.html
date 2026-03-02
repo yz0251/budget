@@ -98,9 +98,7 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 
 /* ── MAIN GRID ── */
 .main-grid{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;}
-.left-col{position:sticky;top:76px;max-height:calc(100vh - 90px);overflow-y:auto;display:flex;flex-direction:column;gap:20px;}
-.left-col::-webkit-scrollbar{width:3px;}
-.left-col::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.left-col{display:flex;flex-direction:column;gap:20px;}
 
 /* ── MINI CALENDAR ── */
 .mini-cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
@@ -354,7 +352,10 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
       <!-- 미니 달력 -->
       <div class="left-col">
         <div class="mini-cal">
-          <div class="mini-cal-head"><span class="mini-cal-title">📅 월간 달력</span></div>
+          <div class="mini-cal-head" style="display:flex;align-items:center;justify-content:space-between;">
+            <span class="mini-cal-title">📅 월간 달력</span>
+            <button class="fixed-add-btn" id="fixedAddBtn" style="padding:5px 12px;font-size:0.72rem;">📌 고정지출</button>
+          </div>
           <div class="cal-grid">
             <div class="cal-dow">
               <span style="color:#f87171">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span style="color:var(--blue)">토</span>
@@ -373,17 +374,7 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
           <div class="panel-body" id="catChart"></div>
         </div>
 
-        <!-- 고정지출 -->
-        <div class="panel">
-          <div class="panel-head">
-            <span class="panel-title">📌 고정지출</span>
-            <span style="font-size:0.72rem;color:var(--muted)">매달 자동 집계</span>
-          </div>
-          <div class="fixed-list" id="fixedList"></div>
-          <div style="padding:12px 20px;border-top:1px solid var(--border);">
-            <button class="fixed-add-btn" id="fixedAddBtn" style="width:100%;">+ 고정지출 추가</button>
-          </div>
-        </div>
+
       </div>
 
       <!-- 거래 내역 -->
@@ -426,6 +417,15 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
             <div class="cmp-sub" id="cmpMonthSub"></div>
           </div>
         </div>
+      </div>
+
+      <!-- 고정지출 목록 -->
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">📌 고정지출</span>
+          <span style="font-size:0.72rem;color:var(--muted)">매달 반복 지출</span>
+        </div>
+        <div class="fixed-list" id="fixedList"></div>
       </div>
 
     </div>
