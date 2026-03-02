@@ -161,11 +161,21 @@
     function goVocab() { document.getElementById('mainScreen').style.display='none'; document.getElementById('vocabScreen').style.display='flex'; renderFullVocab(); }
 
     function processJapaneseText(text, vocabList) {
-        let processed=text.replace(/([^\s\[\]]+)\[([^\[\]]+)\]/g, '<ruby>$1<rt>$2</rt></ruby>');
-        if (vocabList) vocabList.forEach(v=>{
-            const match=v.mean.match(/\*([^*]+)\*/);
-            if (match) processed=processed.replace(new RegExp(`(${v.word})`, 'g'), `<span class="highlight-word" title="${match[1]}">$1</span>`);
-        });
+        // 1. {대상글자}[요미가나] 형식 처리 -> <ruby> 태그로 변환
+        let processed = text.replace(/\{([^{}]+)\}\[([^\[\]]+)\]/g, '<ruby>$1<rt>$2</rt></ruby>');
+        
+        // 2. 단어장 매칭 (호버 뜻 표시 - 선택 사항)
+        if (vocabList && vocabList.length > 0) {
+            vocabList.forEach(v => {
+                const match = v.mean.match(/\*([^*]+)\*/);
+                if (match) {
+                    const primaryMean = match[1];
+                    // 이미 루비 태그가 적용된 곳은 피해서 단어 강조 적용
+                    const regex = new RegExp(`(${v.word})(?![^<]*>|[^<>]*<\/rt>)`, 'g');
+                    processed = processed.replace(regex, `<span class="highlight-word" title="${primaryMean}">$1</span>`);
+                }
+            });
+        }
         return processed;
     }
 
