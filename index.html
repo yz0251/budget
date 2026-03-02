@@ -718,12 +718,10 @@ async function fetchCalendar(showMsg = true) {
       headers: { Authorization: 'Bearer ' + accessToken }
     });
 
-    // [수정] 토큰 만료(401) 시 자동으로 재로그인 시도
+    // 토큰 만료(401) 시 자동으로 재로그인 시도
     if (listRes.status === 401) {
-      localStorage.removeItem('gc_access_token'); // 낡은 토큰 삭제
+      localStorage.removeItem('gc_access_token');
       showStatus('error', '세션이 만료되어 재연결 중입니다...');
-      
-      // 1초 뒤 자동 로그인 함수 호출
       setTimeout(() => {
         startLogin(); 
       }, 1000);
@@ -735,6 +733,10 @@ async function fetchCalendar(showMsg = true) {
     const calendars = (await listRes.json()).items || [];
     allEvents = [];
 
+    // 오늘 날짜 정보 (시간 제외하고 날짜만 비교하기 위함)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     // 각 캘린더에서 이벤트 가져오기
     await Promise.all(calendars.map(async cal => {
       try {
@@ -744,24 +746,32 @@ async function fetchCalendar(showMsg = true) {
           + '&singleEvents=true&orderBy=startTime&maxResults=2500';
           
         const res = await fetch(url, { headers: { Authorization: 'Bearer ' + accessToken } });
-        
-        // 여기서도 만약 401이 나면 위와 동일하게 처리할 수 있지만, 
-        // 보통 위에서 먼저 걸러지므로 기본 처리만 합니다.
         if (!res.ok) return;
 
         const data = await res.json();
         for (const item of (data.items || [])) {
           const title = item.summary || '';
+          // ₩가 없는 일정은 가계부 대상이 아님
           if (!title.includes('₩')) continue;
           
           const amount = parseAmount(title);
           if (amount === null) continue;
           
-          const date = item.start?.date || item.start?.dateTime?.split('T')[0];
-          const key = (item.id || (date + title)).replace(/[^a-zA-Z0-9]/g, '_');
+          const dateStr = item.start?.date || item.start?.dateTime?.split('T')[0];
+          
+          // [핵심 로직] 미래 지출 필터링
+          const eventDate = new Date(dateStr);
+          eventDate.setHours(0, 0, 0, 0);
+          
+          // 만약 이벤트 날짜가 오늘보다 미래라면 리스트에 넣지 않고 건너뜀
+          if (eventDate > today) continue;
+          
+          const key = (item.id || (dateStr + title)).replace(/[^a-zA-Z0-9]/g, '_');
           
           allEvents.push({
-            date, title, amount,
+            date: dateStr, 
+            title, 
+            amount,
             type: amount > 0 ? 'income' : 'expense',
             category: getCategory(title, key),
             calendarName: cal.summary || cal.id,
