@@ -34,8 +34,8 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 .login-desc h2{font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:10px;}
 .login-desc p{font-size:0.83rem;color:var(--muted);line-height:1.9;}
 .login-desc p strong{color:var(--text);}
-.btn-google{width:100%;padding:15px;background:#fff;color:#1f1f1f;border:none;border-radius:12px;font-family:'Noto Sans KR',sans-serif;font-size:0.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all 0.2s;margin-bottom:16px;}
-.btn-google:hover{background:#f0f0f0;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,0.1);}
+.btn-google{width:100%;padding:15px;background:#fff;color:#1f1f1f;border:2px solid #e2e4ec;border-radius:12px;font-family:'Nunito','Noto Sans KR',sans-serif;font-size:0.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all 0.2s;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.btn-google:hover{background:#f8f9ff;border-color:#6c63ff;transform:translateY(-2px);box-shadow:0 6px 20px rgba(108,99,255,0.15);}
 .btn-google svg{width:20px;height:20px;flex-shrink:0;}
 .login-note{font-size:0.72rem;color:var(--muted);text-align:center;line-height:1.8;padding:14px;background:#f0f1f8;border-radius:8px;margin-bottom:20px;}
 .login-note strong{color:var(--text);}
@@ -416,7 +416,7 @@ function startLogin() {
   sessionStorage.setItem('gc_client_id', clientId);
   const params = new URLSearchParams({
     client_id: clientId,
-    redirect_uri: location.origin + location.pathname.replace(/index\.html$/, ''),
+    redirect_uri: location.origin + location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '') + '/',
     response_type: 'token',
     scope: 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.profile',
     prompt: 'select_account'
