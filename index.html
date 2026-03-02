@@ -387,7 +387,7 @@ function startLogin() {
 
   const params = new URLSearchParams({
     client_id: clientId,
-    redirect_uri: location.origin + location.pathname,
+    redirect_uri: location.origin + location.pathname.replace(/index\.html$/, ''),
     response_type: 'token',
     scope: 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.profile',
     prompt: 'select_account'
