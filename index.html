@@ -89,11 +89,10 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 .sc-amt.bl{color:var(--accent);}
 .sc-sub{font-size:0.6rem;color:var(--muted);margin-top:0;}
 
-/* ── MAIN GRID: 2컬럼, 양쪽 높이 맞춤 ── */
+/* ── MAIN GRID ── */
 .main-grid{display:grid;grid-template-columns:280px 1fr;gap:12px;flex:1;overflow:hidden;min-height:0;}
 .left-col{display:flex;flex-direction:column;gap:10px;overflow:hidden;min-height:0;}
 .right-panel{display:flex;flex-direction:column;overflow:hidden;min-height:0;}
-/* 카테고리 차트 패널이 왼쪽 컬럼의 나머지 높이를 채우게 */
 .left-col .panel{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
 .left-col .panel .panel-body{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
 .right-panel .panel{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
@@ -127,7 +126,6 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 .panel-title{font-size:0.82rem;font-weight:700;flex-shrink:0;}
 .panel-head-right{display:flex;align-items:center;gap:6px;}
 
-/* 패널 헤더 버튼 */
 .phbtn{padding:3px 9px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Nunito',sans-serif;font-size:0.67rem;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
 .phbtn:hover{color:var(--accent);border-color:var(--accent);}
 .phbtn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
@@ -139,7 +137,6 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 
 /* ── 카테고리차트 body ── */
 .panel-body{padding:8px 10px;flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
-/* 도넛 차트 */
 .donut-wrap{display:flex;flex-direction:column;align-items:center;flex:1;gap:8px;min-height:0;overflow:hidden;}
 .donut-svg-wrap{position:relative;width:130px;height:130px;flex-shrink:0;}
 .donut-svg-wrap canvas{position:absolute;top:0;left:0;}
@@ -167,7 +164,7 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 .date-filter-bar button{font-size:0.68rem;color:var(--accent);background:transparent;border:1px solid var(--accent);border-radius:5px;padding:2px 8px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;transition:all 0.15s;}
 .date-filter-bar button:hover{background:var(--accent);color:#fff;}
 
-/* ── 지출 비교 (인라인 토글) ── */
+/* ── 지출 비교 ── */
 .compare-inner{display:none;padding:10px 14px;background:#fafbff;border-bottom:1px solid var(--border);}
 .compare-inner.show{display:block;}
 .cmp-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
@@ -236,7 +233,7 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 .fixed-edit{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.82rem;padding:2px 6px;border-radius:4px;transition:all 0.15s;}
 .fixed-edit:hover{color:var(--accent);background:rgba(108,99,255,0.08);}
 
-/* ── 인라인 폼 (고정지출/카테고리 추가폼 공통) ── */
+/* ── 인라인 폼 ── */
 .inline-form{display:none;background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:14px;}
 .inline-form.show{display:block;}
 .inline-form-title{font-size:0.78rem;font-weight:700;color:var(--accent);margin-bottom:10px;}
@@ -251,7 +248,7 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
 .cmi-icon{font-size:1rem;width:24px;text-align:center;flex-shrink:0;}
 .cmi-name{font-size:0.82rem;font-weight:700;white-space:nowrap;}
 .cmi-kw{flex:1;font-size:0.68rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.cmi-edit{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.72rem;padding:3px 7px;border-radius:5px;transition:all 0.15s;font-family:'Nunito',sans-serif;white-space:nowrap;border:1px solid var(--border);}
+.cmi-edit{background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:0.72rem;padding:3px 7px;border-radius:5px;transition:all 0.15s;font-family:'Nunito',sans-serif;white-space:nowrap;}
 .cmi-edit:hover{color:var(--accent);border-color:var(--accent);}
 .cmi-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;padding:3px 5px;border-radius:4px;transition:all 0.15s;}
 .cmi-del:hover{color:var(--expense);}
@@ -336,11 +333,7 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
     </div>
 
     <div class="main-grid">
-
-      <!-- 왼쪽 컬럼 -->
       <div class="left-col">
-
-        <!-- 미니 달력 -->
         <div class="mini-cal">
           <div class="mini-cal-head">
             <span class="mini-cal-title">📅 월간 달력</span>
@@ -358,7 +351,6 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
           </div>
         </div>
 
-        <!-- 카테고리별 지출 -->
         <div class="panel">
           <div class="panel-head">
             <span class="panel-title">카테고리별 지출</span>
@@ -366,10 +358,8 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
           </div>
           <div class="panel-body" id="catChart"></div>
         </div>
-
       </div>
 
-      <!-- 오른쪽: 거래 내역 -->
       <div class="right-panel">
         <div class="panel">
           <div class="panel-head">
@@ -384,7 +374,6 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
             </div>
           </div>
 
-          <!-- 지출 비교 (토글) -->
           <div class="compare-inner" id="compareInner">
             <div class="cmp-row">
               <div class="cmp-card">
@@ -416,7 +405,6 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
           <div class="tx-list" id="txList"></div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -456,7 +444,6 @@ body{font-family:'Nunito','Noto Sans KR',sans-serif;background:var(--bg);color:v
       <div class="modal-title" style="margin-bottom:0">⚙️ 카테고리 관리</div>
       <button class="modal-btn save" id="catAddBtn" style="padding:6px 14px;font-size:0.78rem;">+ 카테고리 추가</button>
     </div>
-    <!-- 추가/수정 폼 -->
     <div class="inline-form" id="catEditForm">
       <div class="inline-form-title" id="catEditFormTitle">새 카테고리</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
@@ -526,8 +513,9 @@ let fixedEditIdx = -1;
 let catEditIdx = -1;
 let showCompare = false;
 
-// ── 카테고리 정의 ── (DEFAULT는 수정만, 삭제 불가 / CUSTOM은 추가/수정/삭제 모두)
-const DEFAULT_CATS = [
+// ── 카테고리 정의 ──
+// ★ CHANGED: DEFAULT_CATS를 let으로 선언하여 localStorage에서 복원 가능하게
+let DEFAULT_CATS = [
   { icon:'💰', name:'수입',  kw:['월급','급여','알바비','용돈'] },
   { icon:'☕', name:'카페',  kw:['카페','커피','스타벅스','이디야','투썸','디저트','카공','스벅','위카페'] },
   { icon:'🍽', name:'식비',  kw:['점심','저녁','아침','식사','밥','편의점','치킨','피자','삼겹살','외식','마트','쿠팡','장보기'] },
@@ -537,40 +525,65 @@ const DEFAULT_CATS = [
   { icon:'🛍', name:'쇼핑',  kw:['쇼핑','의류','옷','신발','책','교보문고','예스24'] },
   { icon:'💸', name:'이체',  kw:['이체','송금','더치','정산'] },
 ];
-let customCats = []; // 사용자가 추가한 카테고리
+let customCats = [];
 
 function allCats() { return [...DEFAULT_CATS, ...customCats]; }
 function catLabel(c) { return c.icon + ' ' + c.name; }
+
+// ★ CHANGED: DEFAULT_CATS도 함께 저장
 function saveCatsLocal() {
-  try { localStorage.setItem('budget_custom_cats', JSON.stringify(customCats)); } catch(e) {}
+  try {
+    localStorage.setItem('budget_custom_cats', JSON.stringify(customCats));
+    localStorage.setItem('budget_default_cats', JSON.stringify(DEFAULT_CATS));
+  } catch(e) {}
+}
+
+// ★ NEW: 수동 지정(localCats)되지 않은 모든 거래내역의 카테고리를 현재 카테고리 규칙으로 재분류
+function reclassifyAllEvents() {
+  allEvents.forEach(e => {
+    if (!localCats[e.key]) {
+      // 수동 지정이 없는 경우에만 자동 재분류
+      e.category = getCategory(e.title, null); // key를 null로 전달해 localCats 조회 건너뜀
+    }
+  });
 }
 
 // ── 초기화 ─────────────────────────────
 function init() {
   if (GOOGLE_CLIENT_ID) document.querySelector('.client-id-section').style.display = 'none';
 
-  try { localMemos   = JSON.parse(localStorage.getItem('budget_memos') || '{}'); } catch(e) {}
-  try { localCats    = JSON.parse(localStorage.getItem('budget_cats')  || '{}'); } catch(e) {}
-  try { fixedExpenses= JSON.parse(localStorage.getItem('budget_fixed') || '[]'); } catch(e) {}
-  try { customCats   = JSON.parse(localStorage.getItem('budget_custom_cats') || '[]'); } catch(e) {}
+  try { localMemos    = JSON.parse(localStorage.getItem('budget_memos') || '{}'); } catch(e) {}
+  try { localCats     = JSON.parse(localStorage.getItem('budget_cats')  || '{}'); } catch(e) {}
+  try { fixedExpenses = JSON.parse(localStorage.getItem('budget_fixed') || '[]'); } catch(e) {}
+  try { customCats    = JSON.parse(localStorage.getItem('budget_custom_cats') || '[]'); } catch(e) {}
+
+  // ★ CHANGED: 저장된 DEFAULT_CATS 복원 (새로고침 후에도 수정사항 유지)
+  try {
+    const savedDefault = localStorage.getItem('budget_default_cats');
+    if (savedDefault) {
+      const parsed = JSON.parse(savedDefault);
+      // 저장된 카테고리 수가 기본값과 같거나 많으면 복원 (의도치 않은 덮어쓰기 방지)
+      if (parsed && parsed.length >= DEFAULT_CATS.length) {
+        DEFAULT_CATS = parsed;
+      } else if (parsed && parsed.length > 0) {
+        // 저장된 게 있으면 일단 복원
+        DEFAULT_CATS = parsed;
+      }
+    }
+  } catch(e) {}
 
   const savedToken = localStorage.getItem('gc_access_token');
   
   if (savedToken) {
     accessToken = savedToken;
-    // 로그인 화면 건너뛰고 바로 메인 표시
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainScreen').style.display = 'flex';
-    
-    // 데이터 불러오기 시도
     Promise.all([fetchUserInfo(), fetchCalendar(false)])
       .catch(e => {
-        // 만약 저장된 토큰이 만료되어 에러가 나면 자동으로 로그인 시도
         console.error("토큰 만료 혹은 오류:", e);
         startLogin(); 
       });
   } else {
-    // 저장된 토큰이 없으면 로그인 화면 노출
     document.getElementById('loginScreen').style.display = 'flex';
   }
 
@@ -586,7 +599,6 @@ function init() {
   document.getElementById('logoutBtn').addEventListener('click', logout);
   document.getElementById('searchQ').addEventListener('input', renderTx);
 
-  // 필터 탭
   document.querySelectorAll('.ftab').forEach(btn => {
     btn.addEventListener('click', () => {
       curFilter = btn.dataset.filter;
@@ -596,12 +608,10 @@ function init() {
     });
   });
 
-  // 날짜 필터 해제
   document.getElementById('clearDateFilter').addEventListener('click', () => {
     selectedDate = null; renderCalendar(); renderTx();
   });
 
-  // 지출 비교 토글
   document.getElementById('cmpToggleBtn').addEventListener('click', () => {
     showCompare = !showCompare;
     document.getElementById('compareInner').classList.toggle('show', showCompare);
@@ -684,12 +694,9 @@ function handleOAuthCallback() {
 
   accessToken = token;
   localStorage.setItem('gc_access_token', token);
-
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('mainScreen').style.display = 'flex';
-  
-  history.replaceState(null, '', location.pathname); // URL에서 토큰 지우기
-  
+  history.replaceState(null, '', location.pathname);
   Promise.all([fetchUserInfo(), fetchCalendar(false)]).then(() => goMain());
 }
 
@@ -713,18 +720,14 @@ async function fetchCalendar(showMsg = true) {
   const timeMax = new Date(y, m, 0, 23, 59, 59).toISOString();
 
   try {
-    // 캘린더 리스트 가져오기
     const listRes = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
       headers: { Authorization: 'Bearer ' + accessToken }
     });
 
-    // 토큰 만료(401) 시 자동으로 재로그인 시도
     if (listRes.status === 401) {
       localStorage.removeItem('gc_access_token');
       showStatus('error', '세션이 만료되어 재연결 중입니다...');
-      setTimeout(() => {
-        startLogin(); 
-      }, 1000);
+      setTimeout(() => { startLogin(); }, 1000);
       return; 
     }
 
@@ -733,11 +736,9 @@ async function fetchCalendar(showMsg = true) {
     const calendars = (await listRes.json()).items || [];
     allEvents = [];
 
-    // 오늘 날짜 정보 (시간 제외하고 날짜만 비교하기 위함)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // 각 캘린더에서 이벤트 가져오기
     await Promise.all(calendars.map(async cal => {
       try {
         const url = 'https://www.googleapis.com/calendar/v3/calendars/'
@@ -751,19 +752,14 @@ async function fetchCalendar(showMsg = true) {
         const data = await res.json();
         for (const item of (data.items || [])) {
           const title = item.summary || '';
-          // ₩가 없는 일정은 가계부 대상이 아님
           if (!title.includes('₩')) continue;
           
           const amount = parseAmount(title);
           if (amount === null) continue;
           
           const dateStr = item.start?.date || item.start?.dateTime?.split('T')[0];
-          
-          // [핵심 로직] 미래 지출 필터링
           const eventDate = new Date(dateStr);
           eventDate.setHours(0, 0, 0, 0);
-          
-          // 만약 이벤트 날짜가 오늘보다 미래라면 리스트에 넣지 않고 건너뜀
           if (eventDate > today) continue;
           
           const key = (item.id || (dateStr + title)).replace(/[^a-zA-Z0-9]/g, '_');
@@ -835,8 +831,6 @@ function loadDemo() {
 function goMain() {
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainScreen').style.display='flex';
-  const fav=document.getElementById('favicon');
-  if (fav) fav.href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📒</text></svg>";
   renderAll();
 }
 
@@ -865,6 +859,7 @@ function parseAmount(t) {
   return -num;
 }
 
+// ★ CHANGED: key가 null이면 localCats 조회를 건너뜀 (reclassifyAllEvents에서 사용)
 function getCategory(t, key) {
   if (key && localCats[key]) return localCats[key];
   for (const c of allCats()) {
@@ -1070,27 +1065,50 @@ function renderCatManageList() {
       const ci=Number(btn.dataset.del)-DEFAULT_CATS.length;
       if(ci<0) return;
       if(!confirm(customCats[ci].name+' 카테고리를 삭제할까요?')) return;
-      customCats.splice(ci,1); saveCatsLocal(); renderCatManageList(); renderChart();
+      customCats.splice(ci,1);
+      saveCatsLocal();
+      // ★ CHANGED: 삭제 후 거래내역 재분류
+      reclassifyAllEvents();
+      renderCatManageList(); renderChart(); renderTx();
     });
   });
 }
 
+// ★ CHANGED: 카테고리 저장 후 DEFAULT_CATS도 저장하고 기존 거래내역 재분류
 function saveCatEdit() {
   const icon=document.getElementById('catEditIcon').value.trim()||'📦';
   const name=document.getElementById('catEditName').value.trim();
   const kw=document.getElementById('catEditKeywords').value.split(',').map(k=>k.trim()).filter(Boolean);
   if(!name){alert('카테고리명을 입력해 주세요.');return;}
   const newCat={icon,name,kw};
+
   if(catEditIdx>=0){
-    if(catEditIdx<DEFAULT_CATS.length) DEFAULT_CATS[catEditIdx]=newCat;
-    else customCats[catEditIdx-DEFAULT_CATS.length]=newCat;
+    if(catEditIdx<DEFAULT_CATS.length) {
+      // 기본 카테고리 수정
+      DEFAULT_CATS[catEditIdx]=newCat;
+    } else {
+      // 커스텀 카테고리 수정
+      customCats[catEditIdx-DEFAULT_CATS.length]=newCat;
+    }
   } else {
+    // 새 커스텀 카테고리 추가
     customCats.push(newCat);
   }
+
+  // ★ DEFAULT_CATS + customCats 모두 저장
   saveCatsLocal();
+
+  // ★ 기존 거래내역 재분류 (수동 지정된 것 제외)
+  reclassifyAllEvents();
+
   document.getElementById('catEditForm').classList.remove('show');
   catEditIdx=-1;
-  renderCatManageList(); renderChart();
+
+  renderCatManageList();
+  renderChart();
+  renderTx();
+
+  showStatus('success', '✅ 카테고리가 저장되었습니다. 기존 거래내역에 반영되었어요.');
 }
 
 // ── 카테고리 도넛 차트 ──────────────────
@@ -1112,11 +1130,9 @@ function renderChart() {
     return;
   }
 
-  // 색상 팔레트를 카테고리에 고정 매핑
   const catColorMap={};
   sorted.forEach(([cat],i)=>{ catColorMap[cat]=DONUT_COLORS[i%DONUT_COLORS.length]; });
 
-  // 범례 HTML
   const legendHtml=sorted.map(([cat,val])=>{
     const icon=cat.split(' ')[0];
     const name=cat.split(' ').slice(1).join(' ');
@@ -1142,7 +1158,6 @@ function renderChart() {
       '<div class="donut-legend">'+legendHtml+'</div>'+
     '</div>';
 
-  // Canvas 도넛 그리기
   const canvas=document.getElementById('donutCanvas');
   const ctx=canvas.getContext('2d');
   const cx=65,cy=65,r=57,inner=36;
@@ -1160,17 +1175,14 @@ function renderChart() {
     angle+=slice;
   });
 
-  // 안쪽 구멍 (도넛 효과)
   ctx.beginPath();
   ctx.arc(cx,cy,inner,0,Math.PI*2);
   ctx.fillStyle='#ffffff';
   ctx.fill();
 
-  // 호버 하이라이트
   el.querySelectorAll('.donut-legend-row').forEach(row=>{
     row.addEventListener('mouseenter',()=>{
       const hcat=row.dataset.cat;
-      // 재렌더링 with highlight
       ctx.clearRect(0,0,130,130);
       let a2=-Math.PI/2;
       sorted.forEach(([cat,val])=>{
